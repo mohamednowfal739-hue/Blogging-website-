@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="M S BLOGGING - Netflix-inspired micro blogging application">
+  <title>M S BLOGGING</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="brand">M S BLOGGING</div>
+    <nav class="nav">
+      <button onclick="showSection('home')">Home</button>
+      <button onclick="showSection('explore')">Explore</button>
+      <button onclick="showSection('notifications')">Notifications <span id="notifyBadge">0</span></button>
+      <button onclick="showSection('messages')">Messages</button>
+      <button onclick="showSection('profile')">Profile</button>
+    </nav>
+    <div class="header-actions">
+      <button class="icon-btn" onclick="toggleTheme()">◐</button>
+      <button class="logout" onclick="logout()">Logout</button>
+    </div>
+  </header>
+
+  <section id="loginScreen" class="login-screen">
+    <div class="login-card">
+      <div class="netflix-n">M</div>
+      <h1>M S BLOGGING</h1>
+      <p>Share your thoughts. Follow your people.</p>
+      <input id="loginName" type="text" placeholder="Enter your name">
+      <button class="red-btn full" onclick="login()">Continue</button>
+      <div class="or">OR</div>
+      <button class="google-btn full" onclick="googleLogin()">G&nbsp; Continue with Google</button>
+      <small>Demo login — real Google OAuth requires a backend/Firebase setup.</small>
+    </div>
+  </section>
+
+  <main id="app" class="app hidden">
+    <div class="layout">
+
+      <aside class="sidebar">
+        <div class="mini-profile">
+          <div class="avatar" id="sideAvatar">N</div>
+          <h3 id="sideName">M S Nowfal</h3>
+          <p id="sideHandle">@nowfal</p>
+        </div>
+
+        <button class="side-btn active" onclick="showSection('home')">⌂ Home</button>
+        <button class="side-btn" onclick="showSection('explore')">⌕ Explore</button>
+        <button class="side-btn" onclick="showSection('notifications')">♧ Notifications</button>
+        <button class="side-btn" onclick="showSection('messages')">✉ Messages</button>
+        <button class="side-btn" onclick="showSection('profile')">♙ Profile</button>
+
+        <button class="red-btn full post-open" onclick="focusComposer()">Post</button>
+      </aside>
+
+      <section class="content">
+
+        <div id="home" class="page-section">
+          <div class="hero">
+            <div>
+              <span class="eyebrow">YOUR FEED</span>
+              <h2>What are you watching?</h2>
+              <p>Turn your ideas into posts.</p>
+            </div>
+            <div class="hero-mark">M</div>
+          </div>
+
+          <div class="composer card">
+            <div class="avatar">N</div>
+            <div class="composer-body">
+              <textarea id="postText" maxlength="280" placeholder="Share something..."></textarea>
+              <div class="composer-bottom">
+                <span id="charCount">0/280</span>
+                <div>
+                  <input id="imageUrl" class="image-input" placeholder="Optional image URL">
+                  <button class="red-btn" onclick="addPost()">Post</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="feed"></div>
+        </div>
+
+        <div id="explore" class="page-section hidden">
+          <div class="section-title">
+            <h2>Explore</h2>
+            <input id="searchInput" class="search" oninput="searchPosts()" placeholder="Search posts or people...">
+          </div>
+          <div id="exploreFeed"></div>
+        </div>
+
+        <div id="notifications" class="page-section hidden">
+          <div class="section-title"><h2>Notifications</h2></div>
+          <div id="notificationList" class="card list"></div>
+        </div>
+
+        <div id="messages" class="page-section hidden">
+          <div class="section-title"><h2>Messages</h2></div>
+          <div class="card message-box">
+            <div class="message-user">● Alex</div>
+            <p>Welcome to M S BLOGGING! 🎬</p>
+            <input id="messageInput" placeholder="Write a message...">
+            <button class="red-btn" onclick="sendMessage()">Send</button>
+            <div id="sentMessages"></div>
+          </div>
+        </div>
+
+        <div id="profile" class="page-section hidden">
+          <div class="profile-cover"></div>
+          <div class="profile-card card">
+            <div class="profile-avatar avatar">N</div>
+            <div class="profile-top">
+              <div>
+                <h2 id="profileName">M S Nowfal</h2>
+                <p id="profileHandle">@nowfal</p>
+              </div>
+              <button class="outline-btn" onclick="editProfile()">Edit Profile</button>
+            </div>
+            <p id="profileBio">AI & Full Stack Developer • Creator • Student</p>
+            <div class="stats">
+              <div><b id="postCount">0</b><span>Posts</span></div>
+              <div><b id="followingCount">0</b><span>Following</span></div>
+              <div><b id="followersCount">128</b><span>Followers</span></div>
+            </div>
+          </div>
+          <h3 class="subheading">My Posts</h3>
+          <div id="profileFeed"></div>
+        </div>
+
+      </section>
+
+      <aside class="rightbar">
+        <div class="search-card card">
+          <input class="search" oninput="quickSearch(this.value)" placeholder="Search">
+        </div>
+
+        <div class="card trend-card">
+          <h3>Trending Now</h3>
+          <div class="trend">#WebDevelopment <small>12.4K posts</small></div>
+          <div class="trend">#AI <small>9.8K posts</small></div>
+          <div class="trend">#MSEngineering <small>5.1K posts</small></div>
+          <div class="trend">#Coding <small>4.7K posts</small></div>
+        </div>
+
+        <div class="card people-card">
+          <h3>People to Follow</h3>
+          <div class="person"><span class="avatar small">A</span><span>Alex</span><button onclick="toggleFollow(this)">Follow</button></div>
+          <div class="person"><span class="avatar small">S</span><span>Sarah</span><button onclick="toggleFollow(this)">Follow</button></div>
+          <div class="person"><span class="avatar small">R</span><span>Rahul</span><button onclick="toggleFollow(this)">Follow</button></div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <footer>
+    <span>© 2026 M S BLOGGING</span>
+    <span>Netflix-inspired interface</span>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
